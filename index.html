@@ -20,7 +20,7 @@
 
 <meta name="description" content="docs">
 <link rel="shortcut icon" href="assets/images/favicon.png">
-<title>Neutron</title>
+<title>neutron</title>
 <link rel="stylesheet" href="assets/stylesheets/application.451f80e5.css">
 <link rel="stylesheet" href="assets/stylesheets/application-palette.22915126.css">
 <meta name="theme-color" content="#ef5350" />
@@ -47,7 +47,7 @@ data-md-color-accent="orange"
 <nav class="md-header-nav md-grid">
 <div class="md-flex">
 <div class="md-flex__cell md-flex__cell--shrink">
-<a href="index.html" title="Neutron" class="md-header-nav__button md-logo">
+<a href="index.html" title="neutron" class="md-header-nav__button md-logo">
 <i class="md-icon">flash_on</i>
 </a>
 </div>
@@ -56,7 +56,7 @@ data-md-color-accent="orange"
 </div>
 <div class="md-flex__cell md-flex__cell--stretch">
 <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
-Neutron
+neutron
 </div>
 </div>
 <div class="md-flex__cell md-flex__cell--shrink">
@@ -85,7 +85,7 @@ Type to start searching
 </div>
 <div class="md-flex__cell md-flex__cell--shrink">
 <div class="md-header-nav__source">
-<a href="https://github.com/cr-org/neutron"
+<a href="https://github.com/profunktor/neutron"
 title="Go to repository"
 class="md-source"
 data-md-source="github">
@@ -93,7 +93,7 @@ data-md-source="github">
 <i class="fa fa-github"></i>
 </div>
 <div class="md-source__repository">
-cr-org/neutron
+profunktor/neutron
 </div>
 </a>
 
@@ -111,16 +111,16 @@ cr-org/neutron
 <div class="md-sidebar__inner">
 <nav class="md-nav md-nav--primary" data-md-level="0" style="visibility: hidden">
 <label class="md-nav__title md-nav__title--site" for="drawer">
-<a href="index.html" title="Neutron" class="md-nav__button md-logo">
+<a href="index.html" title="neutron" class="md-nav__button md-logo">
 <span class="md-nav__button md-logo">
 <i class="md-icon">flash_on</i>
 </a>
-<a href="index.html" title="Neutron">
-Neutron
+<a href="index.html" title="neutron">
+neutron
 </a>
 </label>
 <div class="md-nav__source">
-<a href="https://github.com/cr-org/neutron"
+<a href="https://github.com/profunktor/neutron"
 title="Go to repository"
 class="md-source"
 data-md-source="github">
@@ -128,7 +128,7 @@ data-md-source="github">
 <i class="fa fa-github"></i>
 </div>
 <div class="md-source__repository">
-cr-org/neutron
+profunktor/neutron
 </div>
 </a>
 
@@ -138,7 +138,7 @@ cr-org/neutron
 <nav class="md-nav md-nav--secondary">
 <label class="md-nav__title" for="__toc">Table of contents</label>
 <ul>
-  <li><a href="index.html#neutron" class="header">Neutron</a>
+  <li><a href="index.html#neutron" class="header">neutron</a>
   <ul>
     <li><a href="index.html#quick-start" class="header">Quick start</a></li>
   </ul></li>
@@ -149,7 +149,7 @@ cr-org/neutron
 <ul style="display: none">
 <li class="md-nav__item md-version" id="project.version">
 <label class="md-nav__link" for="__version">
-<i class="md-icon" title="Version">label_outline</i> 0.0.8
+<i class="md-icon" title="Version">label_outline</i> 0.1.0*
 </label>
 </li>
 </ul>
@@ -162,7 +162,7 @@ cr-org/neutron
 <nav class="md-nav md-nav--secondary">
 <label class="md-nav__title" for="__toc">Table of contents</label>
 <ul>
-  <li><a href="index.html#neutron" class="header">Neutron</a>
+  <li><a href="index.html#neutron" class="header">neutron</a>
   <ul>
     <li><a href="index.html#quick-start" class="header">Quick start</a></li>
   </ul></li>
@@ -175,45 +175,44 @@ cr-org/neutron
 <div class="md-content">
 <article class="md-content__inner md-typeset">
 <div class="md-content__searchable">
-<h1><a href="#neutron" name="neutron" class="anchor"><span class="anchor-link"></span></a>Neutron</h1>
+<h1><a href="#neutron" name="neutron" class="anchor"><span class="anchor-link"></span></a>neutron</h1>
 <p>Neutron is a purely functional <a href="https://pulsar.apache.org/">Apache Pulsar</a> client for Scala, build on top of <a href="https://fs2.io">fs2</a> and the Java Pulsar client.</p>
-<p>It is published for Scala 2.13. You can include it in your project by adding the following dependencies.</p><dl class="dependency"><dt>sbt</dt><dd><pre class="prettyprint"><code class="language-scala">libraryDependencies ++= Seq(
-  "com.chatroulette" %% "neutron-core" % "0.0.8",
-  "com.chatroulette" %% "neutron-circe" % "0.0.8",
-  "com.chatroulette" %% "neutron-function" % "0.0.8"
+<p>It is published for Scala 2.13/0. You can include it in your project by adding the following dependencies.</p><dl class="dependency"><dt>sbt</dt><dd><pre class="prettyprint"><code class="language-scala">libraryDependencies ++= Seq(
+  "dev.profunktor" %% "neutron-core" % "0.1.0-SNAPSHOT",
+  "dev.profunktor" %% "neutron-circe" % "0.1.0-SNAPSHOT",
+  "dev.profunktor" % "$neutron-function$" % "0.1.0-SNAPSHOT"
 )</code></pre></dd><dt>Maven</dt><dd><pre class="prettyprint"><code class="language-xml">&lt;dependencies&gt
   &lt;dependency&gt;
-    &lt;groupId&gt;com.chatroulette&lt;/groupId&gt;
+    &lt;groupId&gt;dev.profunktor&lt;/groupId&gt;
     &lt;artifactId&gt;neutron-core_2.13&lt;/artifactId&gt;
-    &lt;version&gt;0.0.8&lt;/version&gt;
+    &lt;version&gt;0.1.0-SNAPSHOT&lt;/version&gt;
   &lt;/dependency&gt
   &lt;dependency&gt;
-    &lt;groupId&gt;com.chatroulette&lt;/groupId&gt;
+    &lt;groupId&gt;dev.profunktor&lt;/groupId&gt;
     &lt;artifactId&gt;neutron-circe_2.13&lt;/artifactId&gt;
-    &lt;version&gt;0.0.8&lt;/version&gt;
+    &lt;version&gt;0.1.0-SNAPSHOT&lt;/version&gt;
   &lt;/dependency&gt
   &lt;dependency&gt;
-    &lt;groupId&gt;com.chatroulette&lt;/groupId&gt;
-    &lt;artifactId&gt;neutron-function_2.13&lt;/artifactId&gt;
-    &lt;version&gt;0.0.8&lt;/version&gt;
+    &lt;groupId&gt;dev.profunktor&lt;/groupId&gt;
+    &lt;artifactId&gt;$neutron-function$&lt;/artifactId&gt;
+    &lt;version&gt;0.1.0-SNAPSHOT&lt;/version&gt;
   &lt;/dependency&gt
 &lt;/dependencies&gt;</code></pre></dd><dt>Gradle</dt><dd><pre class="prettyprint"><code class="language-gradle">dependencies {
-  implementation "com.chatroulette:neutron-core_2.13:0.0.8"
-  implementation "com.chatroulette:neutron-circe_2.13:0.0.8"
-  implementation "com.chatroulette:neutron-function_2.13:0.0.8"
+  implementation "dev.profunktor:neutron-core_2.13:0.1.0-SNAPSHOT"
+  implementation "dev.profunktor:neutron-circe_2.13:0.1.0-SNAPSHOT"
+  implementation "dev.profunktor:$neutron-function$:0.1.0-SNAPSHOT"
 }</code></pre></dd></dl>
 <h2><a href="#quick-start" name="quick-start" class="anchor"><span class="anchor-link"></span></a>Quick start</h2>
-<p>Here&rsquo;s a quick consumer / producer example using Neutron. Note: both are fully asynchronous.</p>
+<p>Here&rsquo;s a quick consumer / producer example using neutron. Note: both are fully asynchronous.</p>
 <pre class="prettyprint"><code class="language-scala mdoc:compile-only">import scala.concurrent.duration._
 
+import dev.profunktor.pulsar._
+import dev.profunktor.pulsar.schema.utf8._
+
 import cats.effect._
-import cats.implicits._
 import fs2.Stream
 
-import cr.pulsar._
-import cr.pulsar.schema.utf8._
-
-object Demo extends IOApp {
+object Demo extends IOApp.Simple {
 
   val config = Config.Builder.default
 
@@ -227,7 +226,7 @@ object Demo extends IOApp {
   val subs =
     Subscription.Builder
       .withName(&quot;my-sub&quot;)
-      .withType(Subscription.Type.Shared)
+      .withType(Subscription.Type.Exclusive)
       .build
 
   val resources: Resource[IO, (Consumer[IO, String], Producer[IO, String])] =
@@ -235,43 +234,45 @@ object Demo extends IOApp {
       pulsar   &lt;- Pulsar.make[IO](config.url)
       consumer &lt;- Consumer.make[IO, String](pulsar, topic, subs)
       producer &lt;- Producer.make[IO, String](pulsar, topic)
-    } yield (consumer, producer)
+    } yield consumer -&gt; producer
 
-  def run(args: List[String]): IO[ExitCode] =
+  val run: IO[Unit] =
     Stream
       .resource(resources)
       .flatMap {
         case (consumer, producer) =&gt;
           val consume =
             consumer
-              .subscribe
-              .evalMap(m =&gt; IO(println(m.payload)) &gt;&gt; consumer.ack(m.id))
+              .autoSubscribe
+              .evalMap(IO.println)
 
           val produce =
             Stream
               .emit(&quot;test data&quot;)
               .covary[IO]
               .metered(3.seconds)
-              .evalMap(producer.send_(_))
+              .evalMap(producer.send_)
 
           consume.concurrently(produce)
-      }.compile.drain.as(ExitCode.Success)
+      }
+      .compile
+      .drain
 
 }
 </code></pre>
 <h3><a href="#schema" name="schema" class="anchor"><span class="anchor-link"></span></a>Schema</h3>
-<p>As of version <code>0.0.6</code>, Neutron ships with support for <a href="https://pulsar.apache.org/docs/en/schema-get-started/">Pulsar Schema</a>. The simplest way to get started is to use the given UTF-8 encoding, which makes use of the native <code>Schema.BYTES</code>.</p>
-<pre class="prettyprint"><code class="language-scala mdoc:compile-only">import cr.pulsar.schema.Schema
-import cr.pulsar.schema.utf8._
+<p>As of version <code>0.0.6</code>, neutron ships with support for <a href="https://pulsar.apache.org/docs/en/schema-get-started/">Pulsar Schema</a>. The simplest way to get started is to use the given UTF-8 encoding, which makes use of the native <code>Schema.BYTES</code>.</p>
+<pre class="prettyprint"><code class="language-scala mdoc:compile-only">import dev.profunktor.pulsar.schema.Schema
+import dev.profunktor.pulsar.schema.utf8._
 
 val schema = Schema[String] // summon instance
 </code></pre>
 <p>This brings into scope an <code>Schema[String]</code> instance, required to initialize consumers and producers. There&rsquo;s also a default instance <code>Schema[A]</code>, for any <code>cats.Inject[A, Array[Byte]]</code> instance (based on <code>Schema.BYTES</code> as well).</p>
-<p>At Chatroulette, we use JSON-serialised data for which we derive a <code>Schema.JSON</code> based on Circe codecs and Avro schemas. Those interested in doing the same can leverage the Circe integration by adding the <code>neutron-circe</code> dependency.</p>
+<p>At work, we use JSON-serialised data for which we derive a <code>Schema.JSON</code> based on Circe codecs and Avro schemas. Those interested in doing the same can leverage the Circe integration by adding the <code>neutron-circe</code> dependency.</p>
 <p>ℹ️ When using schemas, prefer to create the producer(s) before the consumer(s) for fail-fast semantics.</p>
 <p>We also need instances for Circe&rsquo;s <code>Decoder</code> and <code>Encoder</code>, and for <code>JsonSchema</code>, which expects an Avro schema, used by Pulsar. Once you have it, you are an import away from having JSON schema support.</p>
-<pre class="prettyprint"><code class="language-scala mdoc:compile-only">import cr.pulsar.schema.Schema
-import cr.pulsar.schema.circe._
+<pre class="prettyprint"><code class="language-scala mdoc:compile-only">import dev.profunktor.pulsar.schema.Schema
+import dev.profunktor.pulsar.schema.circe._
 
 import io.circe.{Decoder, Encoder}
 import io.circe.generic.semiauto._
@@ -287,8 +288,8 @@ object Event {
 val schema = Schema[Event] // summon an instance
 </code></pre>
 <p>The <code>JsonSchema</code> can be created directly using <code>JsonSchema.derive[A]</code>, which uses <a href="https://github.com/sksamuel/avro4s">avro4s</a> under the hood. In fact, this is the recommended way but if you want to get something quickly up and running, you could also use auto-derivation.</p>
-<pre class="prettyprint"><code class="language-scala mdoc:compile-only">import cr.pulsar.schema.Schema
-import cr.pulsar.schema.circe.auto._
+<pre class="prettyprint"><code class="language-scala mdoc:compile-only">import dev.profunktor.pulsar.schema.Schema
+import dev.profunktor.pulsar.schema.circe.auto._
 
 import io.circe.{Decoder, Encoder}
 import io.circe.generic.semiauto._
@@ -311,7 +312,7 @@ val schema = Schema[Foo] // summon an instance
 <pre class="prettyprint"><code class="language-json">{
   &quot;type&quot; : &quot;record&quot;,
   &quot;name&quot; : &quot;Event&quot;,
-  &quot;namespace&quot; : &quot;cr.pulsar.domain&quot;,
+  &quot;namespace&quot; : &quot;dev.profunktor.pulsar.domain&quot;,
   &quot;fields&quot; : [ {
     &quot;name&quot; : &quot;uuid&quot;,
     &quot;type&quot; : {
@@ -336,7 +337,7 @@ val schema = Schema[Foo] // summon an instance
 <pre class="prettyprint"><code class="language-json">{
   &quot;type&quot; : &quot;record&quot;,
   &quot;name&quot; : &quot;Event&quot;,
-  &quot;namespace&quot; : &quot;cr.pulsar.domain&quot;,
+  &quot;namespace&quot; : &quot;dev.profunktor.pulsar.domain&quot;,
   &quot;fields&quot; : [ {
     &quot;name&quot; : &quot;uuid&quot;,
     &quot;type&quot; : {
@@ -359,7 +360,7 @@ val schema = Schema[Foo] // summon an instance
 <pre class="prettyprint"><code class="language-json">{
   &quot;type&quot; : &quot;record&quot;,
   &quot;name&quot; : &quot;Event&quot;,
-  &quot;namespace&quot; : &quot;cr.pulsar.domain&quot;,
+  &quot;namespace&quot; : &quot;dev.profunktor.pulsar.domain&quot;,
   &quot;fields&quot; : [ {
     &quot;name&quot; : &quot;uuid&quot;,
     &quot;type&quot; : {
@@ -379,13 +380,13 @@ val schema = Schema[Foo] // summon an instance
 <p>See the difference with the previous schema? This one has a <code>default: null</code> in addition to the extra <code>null</code> type.</p>
 </div>
 <div>
-<a href="https://github.com/cr-org/neutron/tree/v0.0.8/docs/src/paradox/index.md" title="Edit this page" class="md-source-file md-edit">
+<a href="https://github.com/profunktor/neutron/tree/master/docs/src/paradox/index.md" title="Edit this page" class="md-source-file md-edit">
 Edit this page
 </a>
 </div>
 <div class="print-only">
 <span class="md-source-file md-version">
-0.0.8
+0.1.0*
 </span>
 </div>
 </article>
@@ -397,7 +398,7 @@ Edit this page
 <div class="md-footer-meta__inner md-grid">
 <div class="md-footer-copyright">
 <div class="md-footer-copyright__highlight">
-Copyright © Chatroulette
+Copyright © ProfunKtor
 </div>
 Powered by
 <a href="https://github.com/lightbend/paradox">Paradox</a>
