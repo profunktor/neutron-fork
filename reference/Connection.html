@@ -19,22 +19,22 @@
 
 
 <meta name="description" content="docs">
-<link rel="shortcut icon" href="assets/images/favicon.png">
-<title>Neutron</title>
-<link rel="stylesheet" href="assets/stylesheets/application.451f80e5.css">
-<link rel="stylesheet" href="assets/stylesheets/application-palette.22915126.css">
+<link rel="shortcut icon" href="../assets/images/favicon.png">
+<title>Connection · Neutron</title>
+<link rel="stylesheet" href="../assets/stylesheets/application.451f80e5.css">
+<link rel="stylesheet" href="../assets/stylesheets/application-palette.22915126.css">
 <meta name="theme-color" content="#009688" />
-<link rel="stylesheet" href="lib/material__tabs/dist/mdc.tabs.min.css">
-<link rel="stylesheet" href="lib/prettify/prettify.css">
-<script src="assets/javascripts/modernizr.1aa3b519.js"></script>
+<link rel="stylesheet" href="../lib/material__tabs/dist/mdc.tabs.min.css">
+<link rel="stylesheet" href="../lib/prettify/prettify.css">
+<script src="../assets/javascripts/modernizr.1aa3b519.js"></script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
 <style>
 body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}
 code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}
 </style>
-<link rel="stylesheet" href="assets/fonts/font-awesome.css">
-<link rel="stylesheet" href="assets/fonts/material-icons.css">
-<link rel="stylesheet" href="assets/stylesheets/paradox-material-theme.css">
+<link rel="stylesheet" href="../assets/fonts/font-awesome.css">
+<link rel="stylesheet" href="../assets/fonts/material-icons.css">
+<link rel="stylesheet" href="../assets/stylesheets/paradox-material-theme.css">
 </head>
 <body
 data-md-color-primary="teal"
@@ -47,7 +47,7 @@ data-md-color-accent="indigo"
 <nav class="md-header-nav md-grid">
 <div class="md-flex">
 <div class="md-flex__cell md-flex__cell--shrink">
-<a href="index.html" title="Neutron" class="md-header-nav__button md-logo">
+<a href="../index.html" title="Neutron" class="md-header-nav__button md-logo">
 <i class="md-icon">flash_on</i>
 </a>
 </div>
@@ -56,7 +56,12 @@ data-md-color-accent="indigo"
 </div>
 <div class="md-flex__cell md-flex__cell--stretch">
 <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+<span class="md-header-nav__topic">
 Neutron
+</span>
+<span class="md-header-nav__topic">
+Connection
+</span>
 </div>
 </div>
 <div class="md-flex__cell md-flex__cell--shrink">
@@ -111,11 +116,11 @@ profunktor/neutron
 <div class="md-sidebar__inner">
 <nav class="md-nav md-nav--primary" data-md-level="0" style="visibility: hidden">
 <label class="md-nav__title md-nav__title--site" for="drawer">
-<a href="index.html" title="Neutron" class="md-nav__button md-logo">
+<a href="../index.html" title="Neutron" class="md-nav__button md-logo">
 <span class="md-nav__button md-logo">
 <i class="md-icon">flash_on</i>
 </a>
-<a href="index.html" title="Neutron">
+<a href="../index.html" title="Neutron">
 Neutron
 </a>
 </label>
@@ -134,22 +139,23 @@ profunktor/neutron
 
 </div>
 <ul>
-  <li><a href="reference/Index.html" class="page">Reference</a>
+  <li><a href="../reference/Index.html" class="page">Reference</a>
   <ul>
-    <li><a href="reference/Connection.html" class="page">Connection</a></li>
-    <li><a href="reference/Consumer.html" class="page">Consumer</a></li>
-    <li><a href="reference/Producer.html" class="page">Producer</a></li>
-    <li><a href="reference/Reader.html" class="page">Reader</a></li>
-    <li><a href="reference/Schema.html" class="page">Schema</a></li>
-    <li><a href="reference/Topic.html" class="page">Topic</a></li>
+    <li><a href="../reference/Connection.html" class="active page">Connection</a></li>
+    <li><a href="../reference/Consumer.html" class="page">Consumer</a></li>
+    <li><a href="../reference/Producer.html" class="page">Producer</a></li>
+    <li><a href="../reference/Reader.html" class="page">Reader</a></li>
+    <li><a href="../reference/Schema.html" class="page">Schema</a></li>
+    <li><a href="../reference/Topic.html" class="page">Topic</a></li>
   </ul></li>
 </ul>
 <nav class="md-nav md-nav--secondary">
 <label class="md-nav__title" for="__toc">Table of contents</label>
 <ul>
-  <li><a href="index.html#neutron" class="header">Neutron</a>
+  <li><a href="../reference/Connection.html#connection" class="header">Connection</a>
   <ul>
-    <li><a href="index.html#quick-start" class="header">Quick start</a></li>
+    <li><a href="../reference/Connection.html#configuration" class="header">Configuration</a></li>
+    <li><a href="../reference/Connection.html#pulsar-client" class="header">Pulsar client</a></li>
   </ul></li>
 </ul>
 </nav>
@@ -171,9 +177,10 @@ profunktor/neutron
 <nav class="md-nav md-nav--secondary">
 <label class="md-nav__title" for="__toc">Table of contents</label>
 <ul>
-  <li><a href="index.html#neutron" class="header">Neutron</a>
+  <li><a href="../reference/Connection.html#connection" class="header">Connection</a>
   <ul>
-    <li><a href="index.html#quick-start" class="header">Quick start</a></li>
+    <li><a href="../reference/Connection.html#configuration" class="header">Configuration</a></li>
+    <li><a href="../reference/Connection.html#pulsar-client" class="header">Pulsar client</a></li>
   </ul></li>
 </ul>
 </nav>
@@ -184,94 +191,57 @@ profunktor/neutron
 <div class="md-content">
 <article class="md-content__inner md-typeset">
 <div class="md-content__searchable">
-<h1><a href="#neutron" name="neutron" class="anchor"><span class="anchor-link"></span></a>Neutron</h1>
-<p>Neutron is a purely functional <a href="https://pulsar.apache.org/">Apache Pulsar</a> client for Scala, build on top of <a href="https://fs2.io">fs2</a> and the Java Pulsar client.</p>
-<p>It is published for Scala 2.13/3.0. You can include it in your project by adding the following dependencies.</p><dl class="dependency"><dt>sbt</dt><dd><pre class="prettyprint"><code class="language-scala">libraryDependencies ++= Seq(
-  "dev.profunktor" %% "neutron-core" % "0.0.8",
-  "dev.profunktor" %% "neutron-circe" % "0.0.8",
-  "dev.profunktor" %% "neutron-function" % "0.0.8"
-)</code></pre></dd><dt>Maven</dt><dd><pre class="prettyprint"><code class="language-xml">&lt;dependencies&gt
-  &lt;dependency&gt;
-    &lt;groupId&gt;dev.profunktor&lt;/groupId&gt;
-    &lt;artifactId&gt;neutron-core_2.13&lt;/artifactId&gt;
-    &lt;version&gt;0.0.8&lt;/version&gt;
-  &lt;/dependency&gt
-  &lt;dependency&gt;
-    &lt;groupId&gt;dev.profunktor&lt;/groupId&gt;
-    &lt;artifactId&gt;neutron-circe_2.13&lt;/artifactId&gt;
-    &lt;version&gt;0.0.8&lt;/version&gt;
-  &lt;/dependency&gt
-  &lt;dependency&gt;
-    &lt;groupId&gt;dev.profunktor&lt;/groupId&gt;
-    &lt;artifactId&gt;neutron-function_2.13&lt;/artifactId&gt;
-    &lt;version&gt;0.0.8&lt;/version&gt;
-  &lt;/dependency&gt
-&lt;/dependencies&gt;</code></pre></dd><dt>Gradle</dt><dd><pre class="prettyprint"><code class="language-gradle">dependencies {
-  implementation "dev.profunktor:neutron-core_2.13:0.0.8"
-  implementation "dev.profunktor:neutron-circe_2.13:0.0.8"
-  implementation "dev.profunktor:neutron-function_2.13:0.0.8"
-}</code></pre></dd></dl>
-<h2><a href="#quick-start" name="quick-start" class="anchor"><span class="anchor-link"></span></a>Quick start</h2>
-<p>Here&rsquo;s a quick consumer / producer example using neutron. Note: both are fully asynchronous.</p>
-<pre class="prettyprint"><code class="language-scala mdoc:compile-only">import scala.concurrent.duration._
+<h1><a href="#connection" name="connection" class="anchor"><span class="anchor-link"></span></a>Connection</h1>
+<p>A connection to Apache Pulsar is an expensive operation, so it is recommended to create a single instance per application.</p>
+<p>The main constructor returns a <code>cats.effect.Resource</code>, and is defined as follows.</p>
+<pre class="prettyprint"><code class="language-scala mdoc">import cats.effect._
+import dev.profunktor.pulsar.Config.PulsarURL
+import dev.profunktor.pulsar.Pulsar.Options
 
-import dev.profunktor.pulsar._
-import dev.profunktor.pulsar.schema.utf8._
+import org.apache.pulsar.client.api.{ PulsarClient =&gt; Underlying }
 
-import cats.effect._
-import fs2.Stream
+type T = Underlying
 
-object Demo extends IOApp.Simple {
+def make[F[_]: Sync](
+    url: PulsarURL,
+    opts: Options = Options()
+): Resource[F, T] = ???
+</code></pre>
+<p>A <code>PulsarURL</code> can only be built using smart builders, as shown in the next section.</p>
+<h2><a href="#configuration" name="configuration" class="anchor"><span class="anchor-link"></span></a>Configuration</h2>
+<p>A default configuration is usually enough to get started locally.</p>
+<pre class="prettyprint"><code class="language-scala mdoc">import dev.profunktor.pulsar.Config
 
-  val config = Config.Builder.default
+val config = Config.Builder.default
+</code></pre>
+<p>It sets <code>tenant=public</code>, <code>namespace=default</code>, and <code>url=pulsar://localhost:6650</code>. If would like to change any of these values, you can use the configuration builder. E.g.</p>
+<pre class="prettyprint"><code class="language-scala mdoc">val custom: Config =
+  Config.Builder
+    .withTenant(&quot;custom&quot;)
+    .withNameSpace(&quot;services&quot;)
+    .withURL(&quot;pulsar://custom.net:6650&quot;)
+    .build
+</code></pre>
+<h2><a href="#pulsar-client" name="pulsar-client" class="anchor"><span class="anchor-link"></span></a>Pulsar client</h2>
+<p>Once we have a configuration, we can proceed with the creation of a Pulsar client, necessary to create consumers, producers, and so on.</p>
+<pre class="prettyprint"><code class="language-scala mdoc">import dev.profunktor.pulsar._
 
-  val topic  =
-    Topic.Builder
-      .withName(&quot;my-topic&quot;)
-      .withConfig(config)
-      .withType(Topic.Type.NonPersistent)
-      .build
+Pulsar.make[IO](config.url)
+</code></pre>
+<h3><a href="#connection-options" name="connection-options" class="anchor"><span class="anchor-link"></span></a>Connection Options</h3>
+<p>Via the second constructor argument, we can set a few client options, such as timeouts.</p>
+<pre class="prettyprint"><code class="language-scala mdoc">import scala.concurrent.duration._
 
-  val subs =
-    Subscription.Builder
-      .withName(&quot;my-sub&quot;)
-      .withType(Subscription.Type.Exclusive)
-      .build
+val opts =
+  Options()
+    .withConnectionTimeout(45.seconds)
+    .withOperationTimeout(30.minutes)
 
-  val resources: Resource[IO, (Consumer[IO, String], Producer[IO, String])] =
-    for {
-      pulsar   &lt;- Pulsar.make[IO](config.url)
-      consumer &lt;- Consumer.make[IO, String](pulsar, topic, subs)
-      producer &lt;- Producer.make[IO, String](pulsar, topic)
-    } yield consumer -&gt; producer
-
-  val run: IO[Unit] =
-    Stream
-      .resource(resources)
-      .flatMap {
-        case (consumer, producer) =&gt;
-          val consume =
-            consumer
-              .autoSubscribe
-              .evalMap(IO.println)
-
-          val produce =
-            Stream
-              .emit(&quot;test data&quot;)
-              .covary[IO]
-              .metered(3.seconds)
-              .evalMap(producer.send_)
-
-          consume.concurrently(produce)
-      }
-      .compile
-      .drain
-
-}
+Pulsar.make[IO](config.url, opts)
 </code></pre>
 </div>
 <div>
-<a href="https://github.com/profunktor/neutron/tree/master/docs/src/paradox/index.md" title="Edit this page" class="md-source-file md-edit">
+<a href="https://github.com/profunktor/neutron/tree/master/docs/src/paradox/reference/Connection.md" title="Edit this page" class="md-source-file md-edit">
 Edit this page
 </a>
 </div>
@@ -287,13 +257,26 @@ Edit this page
 <footer class="md-footer">
 <div class="md-footer-nav">
 <nav class="md-footer-nav__inner md-grid">
-<a href="reference/Index.html" title="Reference" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+<a href="../reference/Index.html" title="Reference" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+<div class="md-flex__cell md-flex__cell--shrink">
+<i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+</div>
+<div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+<span class="md-flex__ellipsis">
+<span class="md-footer-nav__direction">
+Previous
+</span>
+Reference
+</span>
+</div>
+</a>
+<a href="../reference/Consumer.html" title="Consumer" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
 <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
 <span class="md-flex__ellipsis">
 <span class="md-footer-nav__direction">
 Next
 </span>
-Reference
+Consumer
 </span>
 </div>
 <div class="md-flex__cell md-flex__cell--shrink">
@@ -319,11 +302,11 @@ and
 </footer>
 
 </div>
-<script src="assets/javascripts/application.583bbe55.js"></script>
-<script src="assets/javascripts/paradox-material-theme.js"></script>
-<script>app.initialize({version:"0.17",url:{base:"."}})</script>
-<script type="text/javascript" src="lib/prettify/prettify.js"></script>
-<script type="text/javascript" src="lib/prettify/lang-scala.js"></script>
+<script src="../assets/javascripts/application.583bbe55.js"></script>
+<script src="../assets/javascripts/paradox-material-theme.js"></script>
+<script>app.initialize({version:"0.17",url:{base:"../."}})</script>
+<script type="text/javascript" src="../lib/prettify/prettify.js"></script>
+<script type="text/javascript" src="../lib/prettify/lang-scala.js"></script>
 <script type="text/javascript">
 document.addEventListener("DOMContentLoaded", function(event) {
 window.prettyPrint && prettyPrint();
