@@ -271,7 +271,7 @@ def custom(
 ): Resource[IO, Reader[IO, String]] =
   Reader.make(pulsar, topic, opts)
 </code></pre>
-<p>It is the responsibility of the application to know the specific <code>MessageId</code>.</p>
+<p>It is the responsibility of the application to know the specific <code>MessageId</code>, which internally represents a Ledger ID, Entry ID, and Partition ID.</p>
 </div>
 <div>
 <a href="https://github.com/profunktor/neutron/tree/master/docs/src/paradox/reference/Reader.md" title="Edit this page" class="md-source-file md-edit">
