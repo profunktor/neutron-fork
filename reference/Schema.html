@@ -199,37 +199,19 @@ profunktor/neutron
 <p>If you only want to play around with Pulsar to get familiar with it, you can either choose UTF-8 or the simple JSON support via <code>SchemaType.BYTES</code>, which have no validation whatsoever, as explained in the next sections.</p>
 <h2><a href="#utf-8" name="utf-8" class="anchor"><span class="anchor-link"></span></a>UTF-8</h2>
 <p>The simplest way to get started is to use the given UTF-8 encoding, which makes use of the native <code>Schema.BYTES</code>.</p>
-<pre class="prettyprint"><code class="language-scala mdoc:compile-only">import dev.profunktor.pulsar.schema.Schema
-import dev.profunktor.pulsar.schema.utf8._
+<pre class="prettyprint"><code class="language-scala mdoc:compile-only">import dev.profunktor.pulsar.schema.PulsarSchema
+import org.apache.pulsar.client.api.Schema
 
-val schema = Schema[String] // summon instance
+val schema: Schema[String] = PulsarSchema.utf8
 </code></pre>
-<p>This brings into scope an <code>Schema[String]</code> instance, required to initialize consumers and producers. There&rsquo;s also a default instance <code>Schema[A]</code>, for any <code>cats.Inject[A, Array[Byte]]</code> instance (based on <code>Schema.BYTES</code> as well).</p><div class="callout note "><div class="callout-title">Note</div>
+<p>Here we create a <code>Schema[String]</code>, required to initialize consumers and producers with Pulsar schema support.</p><div class="callout note "><div class="callout-title">Note</div>
 <p>When using schemas, prefer to create the producer(s) before the consumer(s) for fail-fast semantics.</p></div>
 <h2><a href="#json-support" name="json-support" class="anchor"><span class="anchor-link"></span></a>JSON support</h2>
-<p>One of the most common communication protocols is JSON, and Neutron integrates with the Circe library to support it. We have a few alternatives here, which come from the <code>neutron-circe</code> dependency.</p>
-<ol>
-  <li><code>SchemaType.BYTES</code>: This disables Pulsar schema support, which makes it faster, but there is no schema validation performed by Pulsar.</li>
-  <li><code>SchemaType.JSON</code>: This enables Pulsar schema support, which means topics can be inspected by Pulsar Functions and so on, and it is validated by Pulsar at runtime, when creating producers and consumers.</li>
-</ol>
-<p>The former is the easiest one, which only requires instances of Circe&rsquo;s <code>Decoder</code> and <code>Encoder</code> in scope. Just import <code>circe.bytes._</code>, as shown in the example below.</p>
-<pre class="prettyprint"><code class="language-scala mdoc:compile-only">import dev.profunktor.pulsar.schema.Schema
-import dev.profunktor.pulsar.schema.circe.bytes._
-
-import io.circe.{Decoder, Encoder}
-import io.circe.generic.semiauto._
-
-case class Person(age: Int, name: String)
-object Person {
-  implicit val jsonEncoder: Encoder[Person] = deriveEncoder
-  implicit val jsonDecoder: Decoder[Person] = deriveDecoder
-}
-
-val schema = Schema[Person] // summon an instance
-</code></pre>
-<p>The latter is more complex, and there are two variations. The recommended one is based on semi-automatic derivation, as shown in the example below.</p>
-<pre class="prettyprint"><code class="language-scala mdoc:compile-only">import dev.profunktor.pulsar.schema.Schema
-import dev.profunktor.pulsar.schema.circe._
+<p>One of the most common communication protocols is JSON, and Neutron integrates with the Circe library to support it via the <code>neutron-circe</code> dependency.</p>
+<p>It sets <code>SchemaType.JSON</code>, which means topics can be inspected by Pulsar Functions and so on, and it is validated by Pulsar at runtime, when creating producers and consumers.</p>
+<p>The recommended one is based on semi-automatic derivation, as shown in the example below.</p>
+<pre class="prettyprint"><code class="language-scala mdoc:compile-only">import dev.profunktor.pulsar.schema.circe.JsonSchema
+import org.apache.pulsar.client.api.Schema
 
 import io.circe.{Decoder, Encoder}
 import io.circe.generic.semiauto._
@@ -238,28 +220,11 @@ case class Event(id: Long, name: String)
 object Event {
   implicit val jsonEncoder: Encoder[Event] = deriveEncoder
   implicit val jsonDecoder: Decoder[Event] = deriveDecoder
-
-  implicit val jsonSchema: JsonSchema[Event] = JsonSchema.derive
 }
 
-val schema = Schema[Event] // summon an instance
+val schema: Schema[Event] = JsonSchema.make[Event]
 </code></pre>
-<p>It requires instances of <code>Decoder</code> and <code>Encoder</code>, and of <code>JsonSchema</code>, which expects an Avro schema, used internally by Pulsar.</p>
-<p>A <code>JsonSchema</code> can be created directly using <code>JsonSchema.derive[A]</code>, which uses <a href="https://github.com/sksamuel/avro4s">avro4s</a> under the hood. In fact, this is the recommended way but if you want to get something quickly up and running, you could also use auto-derivation.</p>
-<pre class="prettyprint"><code class="language-scala mdoc:compile-only">import dev.profunktor.pulsar.schema.Schema
-import dev.profunktor.pulsar.schema.circe.auto._
-
-import io.circe.{Decoder, Encoder}
-import io.circe.generic.semiauto._
-
-case class Foo(tag: String)
-object Foo {
-  implicit val jsonEncoder: Encoder[Foo] = deriveEncoder
-  implicit val jsonDecoder: Decoder[Foo] = deriveDecoder
-}
-
-val schema = Schema[Foo] // summon an instance
-</code></pre>
+<p>It requires instances of <code>Decoder</code> and <code>Encoder</code>, and of <code>SchemaFor</code>, which comes from the <a href="https://github.com/sksamuel/avro4s">avro4s</a> library.</p>
 <p>Notice that <code>avro4s</code> is marked as <code>Provided</code>, meaning you need to explicitly add it to your classpath.</p>
 <h2><a href="#schema-compatibility-check-strategy" name="schema-compatibility-check-strategy" class="anchor"><span class="anchor-link"></span></a>Schema Compatibility Check Strategy</h2>
 <p>Whenever using schemas, make sure you fully understand the different <a href="https://pulsar.apache.org/docs/en/schema-evolution-compatibility/#schema-compatibility-check-strategy">strategies</a>, which only operate at the namespace level (e.g. see how integration tests are set up in the <a href="./run.sh">run.sh</a> shell script).</p>

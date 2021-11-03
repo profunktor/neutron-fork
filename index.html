@@ -185,8 +185,8 @@ profunktor/neutron
 <article class="md-content__inner md-typeset">
 <div class="md-content__searchable">
 <h1><a href="#neutron" name="neutron" class="anchor"><span class="anchor-link"></span></a>Neutron</h1>
-<p>Neutron is a purely functional <a href="https://pulsar.apache.org/">Apache Pulsar</a> client for Scala, build on top of <a href="https://fs2.io">fs2</a> and the Java Pulsar client.</p>
-<p>It is published for Scala 2.13/3.0. You can include it in your project by adding the following dependencies.</p><dl class="dependency"><dt>sbt</dt><dd><pre class="prettyprint"><code class="language-scala">libraryDependencies ++= Seq(
+<p>Neutron is a purely functional <a href="https://pulsar.apache.org/">Apache Pulsar</a> client for Scala, build on top of <a href="https://fs2.io">fs2</a> and the <a href="https://pulsar.apache.org/docs/en/client-libraries-java/">Java client for Pulsar</a>.</p>
+<p>It is published for Scala 2.13/3.1. You can include it in your project by adding the following dependencies.</p><dl class="dependency"><dt>sbt</dt><dd><pre class="prettyprint"><code class="language-scala">libraryDependencies ++= Seq(
   "dev.profunktor" %% "neutron-core" % "0.1.0",
   "dev.profunktor" %% "neutron-circe" % "0.1.0",
   "dev.profunktor" %% "neutron-function" % "0.1.0"
@@ -216,7 +216,7 @@ profunktor/neutron
 <pre class="prettyprint"><code class="language-scala mdoc:compile-only">import scala.concurrent.duration._
 
 import dev.profunktor.pulsar._
-import dev.profunktor.pulsar.schema.utf8._
+import dev.profunktor.pulsar.schema.PulsarSchema
 
 import cats.effect._
 import fs2.Stream
@@ -238,11 +238,13 @@ object Demo extends IOApp.Simple {
       .withType(Subscription.Type.Exclusive)
       .build
 
+  val schema = PulsarSchema.utf8
+
   val resources: Resource[IO, (Consumer[IO, String], Producer[IO, String])] =
     for {
       pulsar   &lt;- Pulsar.make[IO](config.url)
-      consumer &lt;- Consumer.make[IO, String](pulsar, topic, subs)
-      producer &lt;- Producer.make[IO, String](pulsar, topic)
+      consumer &lt;- Consumer.make[IO, String](pulsar, topic, subs, schema)
+      producer &lt;- Producer.make[IO, String](pulsar, topic, schema)
     } yield consumer -&gt; producer
 
   val run: IO[Unit] =

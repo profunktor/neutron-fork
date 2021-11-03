@@ -157,7 +157,7 @@ profunktor/neutron
     <li><a href="../reference/Producer.html#creating-a-producer" class="header">Creating a Producer</a></li>
     <li><a href="../reference/Producer.html#publishing-a-message" class="header">Publishing a message</a></li>
     <li><a href="../reference/Producer.html#sharding" class="header">Sharding</a></li>
-    <li><a href="../reference/Producer.html#producer-options" class="header">Producer Options</a></li>
+    <li><a href="../reference/Producer.html#producer-settings" class="header">Producer settings</a></li>
   </ul></li>
 </ul>
 </nav>
@@ -184,7 +184,7 @@ profunktor/neutron
     <li><a href="../reference/Producer.html#creating-a-producer" class="header">Creating a Producer</a></li>
     <li><a href="../reference/Producer.html#publishing-a-message" class="header">Publishing a message</a></li>
     <li><a href="../reference/Producer.html#sharding" class="header">Sharding</a></li>
-    <li><a href="../reference/Producer.html#producer-options" class="header">Producer Options</a></li>
+    <li><a href="../reference/Producer.html#producer-settings" class="header">Producer settings</a></li>
   </ul></li>
 </ul>
 </nav>
@@ -210,29 +210,40 @@ trait Producer[F[_], E] {
 </code></pre>
 <p>We will expand on its methods in the next few sections.</p>
 <h2><a href="#creating-a-producer" name="creating-a-producer" class="anchor"><span class="anchor-link"></span></a>Creating a Producer</h2>
-<p>It defines a single constructor, defined as follows.</p>
-<pre class="prettyprint"><code class="language-scala mdoc:compile-only">import cats.effect._
-import dev.profunktor.pulsar._
-import dev.profunktor.pulsar.schema.Schema
-import dev.profunktor.pulsar.Producer.Options
-
-def make[F[_]: Sync, E: Schema](
+<p>It defines a few constructs, similarly as <code>Consumer</code> does. If we need Pulsar schema support:</p>
+<pre class="prettyprint"><code class="language-scala">def make[F[_]: FutureLift: Parallel: Sync, E](
     client: Pulsar.T,
     topic: Topic.Single,
-    opts: Options[F, E] = null // default value does not work with generics
+    schema: Schema[E]
+): Resource[F, Producer[F, E]] = ???
+</code></pre>
+<p>If we do not need Pulsar schema support, we need to provide a message encoder.</p>
+<pre class="prettyprint"><code class="language-scala">def make[F[_]: FutureLift: Parallel: Sync, E](
+    client: Pulsar.T,
+    topic: Topic.Single,
+    messageEncoder: E =&gt; Array[Byte]
+): Resource[F, Producer[F, E]] = ???
+</code></pre>
+<p>Otherwise, we have the generic constructor that takes in a Producer.Settings argument.</p>
+<pre class="prettyprint"><code class="language-scala">def make[F[_]: Sync, E: Schema](
+    client: Pulsar.T,
+    topic: Topic.Single,
+    settings: Settings[F, E] = null // default value does not work with generics
 ): Resource[F, Producer[F, E]] = ???
 </code></pre>
 <p>Once we have a connection and a topic, we can proceed with the creation of producer. If you missed that part, check out the <a href="Connection.html">connection</a> and <a href="Topic.html">topic</a> docs.</p>
 <pre class="prettyprint"><code class="language-scala mdoc">import dev.profunktor.pulsar._
-import dev.profunktor.pulsar.schema.utf8._
+import dev.profunktor.pulsar.schema.PulsarSchema
 
 import cats.effect._
+
+val schema = PulsarSchema.utf8
 
 def creation(
     pulsar: Pulsar.T,
     topic: Topic.Single
 ): Resource[IO, Producer[IO, String]] =
-  Producer.make[IO, String](pulsar, topic)
+  Producer.make[IO, String](pulsar, topic, schema)
 </code></pre>
 <h2><a href="#publishing-a-message" name="publishing-a-message" class="anchor"><span class="anchor-link"></span></a>Publishing a message</h2>
 <p>We can publish a message via the <code>send</code> method, which returns a <code>MessageId</code> we could potentially use to store in the application&rsquo;s state. If you don&rsquo;t need it, prefer to use <code>send_</code> instead.</p>
@@ -259,24 +270,27 @@ object MessageKey {
 }
 </code></pre>
 <p>However, if you always want to publish messages according to a specific key, prefer to use the <code>withShardKey</code> option, described in the next section.</p>
-<h2><a href="#producer-options" name="producer-options" class="anchor"><span class="anchor-link"></span></a>Producer Options</h2>
+<h2><a href="#producer-settings" name="producer-settings" class="anchor"><span class="anchor-link"></span></a>Producer settings</h2>
 <p>The producer constructor can also be customized with a few extra options. E.g.</p>
-<pre class="prettyprint"><code class="language-scala mdoc">import scala.concurrent.duration._
+<pre class="prettyprint"><code class="language-scala mdoc">import java.nio.charset.StandardCharsets.UTF_8
+
+import scala.concurrent.duration._
 
 val batching =
   Producer.Batching.Enabled(maxDelay = 5.seconds, maxMessages = 500)
 
-val opts =
-  Producer.Options[IO, String]()
+val settings =
+  Producer.Settings[IO, String]()
    .withBatching(batching)
    .withShardKey(s =&gt; ShardKey.Of(s.hashCode.toString.getBytes))
    .withLogger(e =&gt; url =&gt; IO.println(s&quot;Message: $e, URL: $url&quot;))
+   .withMessageEncoder(_.getBytes(UTF_8))
 
 def custom(
     pulsar: Pulsar.T,
     topic: Topic.Single
 ): Resource[IO, Producer[IO, String]] =
-  Producer.make(pulsar, topic, opts)
+  Producer.make(pulsar, topic, settings)
 </code></pre>
 <p>The <code>withShardKey</code> option is quite useful when we want to publish messages based on certain property of your messages, e.g. an <code>EventId</code>. This applies when you use it together with <code>KeyShared</code> subscriptions, on the consumer side.</p>
 <p>When a <code>ShardKey</code> is defined, we don&rsquo;t need to provide a <code>MessageKey</code> manually and can just use the simple <code>send</code> and <code>send_</code> methods that take a single argument: the payload.</p>

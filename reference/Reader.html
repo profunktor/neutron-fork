@@ -156,7 +156,7 @@ profunktor/neutron
   <ul>
     <li><a href="../reference/Reader.html#creating-a-reader" class="header">Creating a Reader</a></li>
     <li><a href="../reference/Reader.html#reading-messages" class="header">Reading messages</a></li>
-    <li><a href="../reference/Reader.html#reader-options" class="header">Reader Options</a></li>
+    <li><a href="../reference/Reader.html#reader-settings" class="header">Reader settings</a></li>
   </ul></li>
 </ul>
 </nav>
@@ -182,7 +182,7 @@ profunktor/neutron
   <ul>
     <li><a href="../reference/Reader.html#creating-a-reader" class="header">Creating a Reader</a></li>
     <li><a href="../reference/Reader.html#reading-messages" class="header">Reading messages</a></li>
-    <li><a href="../reference/Reader.html#reader-options" class="header">Reader Options</a></li>
+    <li><a href="../reference/Reader.html#reader-settings" class="header">Reader settings</a></li>
   </ul></li>
 </ul>
 </nav>
@@ -216,31 +216,32 @@ trait Reader[F[_], E] {
 </code></pre>
 <p>There&rsquo;s also a <code>MessageReader</code> algebra, useful whenever you need more than the payload of the message, such as the <code>MessageId</code> and <code>MessageKey</code>.</p>
 <h2><a href="#creating-a-reader" name="creating-a-reader" class="anchor"><span class="anchor-link"></span></a>Creating a Reader</h2>
-<p>The following constructor can be used to create a reader.</p>
+<p>It provides a few constructors as both <code>Consumer</code> and <code>Producer</code> do for schema and message decoders, in addition to the following generic one.</p>
 <pre class="prettyprint"><code class="language-scala mdoc:compile-only">import dev.profunktor.pulsar._
-import dev.profunktor.pulsar.Reader.Options
-import dev.profunktor.pulsar.schema.Schema
+import dev.profunktor.pulsar.Reader.Settings
 
 import cats.effect._
 
-def make[F[_]: Sync, E: Schema](
+def make[F[_]: Sync, E](
     client: Pulsar.T,
     topic: Topic.Single,
-    opts: Options = Options()
+    settings: Settings[F, E]
 ): Resource[F, Reader[F, E]] = ???
 </code></pre>
 <p>If you&rsquo;re interested in a <code>MessageReader</code> instead, you can use <code>messageReader</code> instead of <code>make</code>.</p>
 <p>Once we have a Pulsar client and a topic, we can proceed with the creation of a reader. If you missed that part, check out the <a href="Connection.html">connection</a> and <a href="Topic.html">topic</a> docs.</p>
 <pre class="prettyprint"><code class="language-scala mdoc">import dev.profunktor.pulsar._
-import dev.profunktor.pulsar.schema.utf8._
+import dev.profunktor.pulsar.schema.PulsarSchema
 
 import cats.effect._
+
+val schema = PulsarSchema.utf8
 
 def creation(
     pulsar: Pulsar.T,
     topic: Topic.Single
 ): Resource[IO, Reader[IO, String]] =
-  Reader.make[IO, String](pulsar, topic)
+  Reader.make[IO, String](pulsar, topic, schema)
 </code></pre>
 <h2><a href="#reading-messages" name="reading-messages" class="anchor"><span class="anchor-link"></span></a>Reading messages</h2>
 <p>We can use any of the available <code>read</code> methods. E.g.</p>
@@ -254,22 +255,23 @@ def creation(
    .drain
 </code></pre>
 <p>Or we can first ask whether there are available messages or not via <code>messageAvailable</code>.</p>
-<h2><a href="#reader-options" name="reader-options" class="anchor"><span class="anchor-link"></span></a>Reader Options</h2>
+<h2><a href="#reader-settings" name="reader-settings" class="anchor"><span class="anchor-link"></span></a>Reader settings</h2>
 <p>The reader constructor can also be customized with a few extra options. E.g.</p>
 <pre class="prettyprint"><code class="language-scala mdoc">import org.apache.pulsar.client.api.MessageId
 
 val msgId: MessageId = null
 
-val opts =
-  Reader.Options()
+val settings =
+  Reader.Settings[IO, String]()
    .withStartMessageId(msgId)
    .withReadCompacted
+   .withSchema(schema)
 
 def custom(
     pulsar: Pulsar.T,
     topic: Topic.Single
 ): Resource[IO, Reader[IO, String]] =
-  Reader.make(pulsar, topic, opts)
+  Reader.make(pulsar, topic, settings)
 </code></pre>
 <p>It is the responsibility of the application to know the specific <code>MessageId</code>, which internally represents a Ledger ID, Entry ID, and Partition ID.</p>
 </div>

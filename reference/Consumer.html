@@ -159,7 +159,7 @@ profunktor/neutron
     <li><a href="../reference/Consumer.html#auto-subscription" class="header">Auto-subscription</a></li>
     <li><a href="../reference/Consumer.html#manual-ack" class="header">Manual ack</a></li>
     <li><a href="../reference/Consumer.html#unsubscribe" class="header">Unsubscribe</a></li>
-    <li><a href="../reference/Consumer.html#consumer-options" class="header">Consumer options</a></li>
+    <li><a href="../reference/Consumer.html#consumer-settings" class="header">Consumer settings</a></li>
   </ul></li>
 </ul>
 </nav>
@@ -188,7 +188,7 @@ profunktor/neutron
     <li><a href="../reference/Consumer.html#auto-subscription" class="header">Auto-subscription</a></li>
     <li><a href="../reference/Consumer.html#manual-ack" class="header">Manual ack</a></li>
     <li><a href="../reference/Consumer.html#unsubscribe" class="header">Unsubscribe</a></li>
-    <li><a href="../reference/Consumer.html#consumer-options" class="header">Consumer options</a></li>
+    <li><a href="../reference/Consumer.html#consumer-settings" class="header">Consumer settings</a></li>
   </ul></li>
 </ul>
 </nav>
@@ -232,25 +232,63 @@ val subs =
 </code></pre>
 <p>There are four types of subscriptions: <code>Exclusive</code>, <code>Shared</code>, <code>KeyShared</code>, and <code>Failover</code>.</p>
 <h2><a href="#creating-a-consumer" name="creating-a-consumer" class="anchor"><span class="anchor-link"></span></a>Creating a Consumer</h2>
-<p>There is a smart constructor we can use to create a consumer, defined as follows.</p>
+<p>There are a few smart constructors we can use to create a consumer. If we want Pulsar schema support, we have the following one:</p>
+<pre class="prettyprint"><code class="language-scala">import org.apache.pulsar.client.api.Schema
+
+def make[F[_]: FutureLift: Sync, E](
+    client: Pulsar.T,
+    topic: Topic,
+    sub: Subscription,
+    schema: Schema[E]
+): Resource[F, Consumer[F, E]] = ???
+</code></pre>
+<p>If we do not want Pulsar schema support, then we need to provide a message decoder, and ideally a decoding error handler, which are both functions.</p>
+<pre class="prettyprint"><code class="language-scala">def make[F[_]: FutureLift: Sync, E](
+    client: Pulsar.T,
+    topic: Topic,
+    sub: Subscription,
+    messageDecoder: Array[Byte] =&gt; F[E],
+    decodingErrorHandler: Throwable =&gt; F[OnFailure] // defaults to Raise
+): Resource[F, Consumer[F, E]] = ???
+</code></pre>
+<p>For example, an UTF-8 encoded string could be the following one:</p>
+<pre class="prettyprint"><code class="language-scala">import java.nio.charset.StandardCharsets.UTF_8
+
+val utf8Decoder: Array[Byte] =&gt; IO[String] =
+  bs =&gt; IO(new String(bs, UTF_8))
+</code></pre>
+<p>Or we could use a JSON decoder powered by Circe:</p>
+<pre class="prettyprint"><code class="language-scala">import io.circe.Decoder
+
+def jsonDecoder[A: Decoder]: Array[Byte] =&gt; IO[A] =
+  bs =&gt; IO.fromEither(io.circe.parser.decode[A](new String(bs, UTF_8)))
+</code></pre>
+<p>If we do not specify the decoding error handler, then the default is to re-raise the error when a message cannot be decoded. That&rsquo;s usually a sane default, but every case is different and you might want to <code>ack</code> or <code>nack</code> the message, which can be done as follows:</p>
+<pre class="prettyprint"><code class="language-scala">val handler: Throwable =&gt; IO[Consumer.OnFailure] =
+  e =&gt; IO.println(s&quot;[error] - ${e.getMessage}&quot;).as(Consumer.OnFailure.Nack)
+</code></pre>
+<p>Finally, there&rsquo;s a generic <code>make</code> which takes an <code>Settings[F, E]</code> where we can set many other consumer settings, including schema or decoding handler.</p>
+<p>BEWARE if you set the pulsar schema, then a decoding error handler won&rsquo;t take effect. Also, if you do not set neither the schema or the message decoder, then you&rsquo;ll get a runtime error when creating the consumer.</p>
 <pre class="prettyprint"><code class="language-scala">def make[F[_]: Sync: FutureLift, E: Schema](
     client: Pulsar.T,
     topic: Topic,
     sub: Subscription,
-    opts: Options[F, E] = null // default value does not work with generics
+    settings: Settings[F, E]
 ): Resource[F, Consumer[F, E]] = ???
 </code></pre>
 <p>Once we have a subscription, we can create a consumer, assuming we also have a pulsar connection and a topic.</p>
 <p>If you missed that part, check out the <a href="Connection.html">connection</a> and <a href="Topic.html">topic</a> docs.</p>
-<pre class="prettyprint"><code class="language-scala mdoc">import dev.profunktor.pulsar.schema.utf8._
+<pre class="prettyprint"><code class="language-scala mdoc">import dev.profunktor.pulsar.schema.PulsarSchema
 
 import cats.effect._
+
+val schema = PulsarSchema.utf8
 
 def creation(
     pulsar: Pulsar.T,
     topic: Topic
 ): Resource[IO, Consumer[IO, String]] =
-  Consumer.make[IO, String](pulsar, topic, subs)
+  Consumer.make[IO, String](pulsar, topic, subs, schema)
 </code></pre>
 <h2><a href="#auto-subscription" name="auto-subscription" class="anchor"><span class="anchor-link"></span></a>Auto-subscription</h2>
 <p>This is the easiest way to get started with a consumer. Once a message is received, it will be automatically acknowledged (ack) by us. It is done via the <code>autoSubscribe</code> method, as shown below.</p>
@@ -297,9 +335,11 @@ def manual(
    .drain
 </code></pre>
 <p>This functionality can be enabled to be performed automatically via the <code>autoUnsubscribe</code> option.</p>
-<h2><a href="#consumer-options" name="consumer-options" class="anchor"><span class="anchor-link"></span></a>Consumer options</h2>
+<h2><a href="#consumer-settings" name="consumer-settings" class="anchor"><span class="anchor-link"></span></a>Consumer settings</h2>
 <p>When creating a consumer, we can choose to customize the default options. E.g.</p>
-<pre class="prettyprint"><code class="language-scala mdoc">import org.apache.pulsar.client.api.{
+<pre class="prettyprint"><code class="language-scala mdoc">import java.nio.charset.StandardCharsets.UTF_8
+
+import org.apache.pulsar.client.api.{
   DeadLetterPolicy,
   SubscriptionInitialPosition
 }
@@ -312,19 +352,27 @@ val deadLetterPolicy =
     .retryLetterTopic(&quot;bar&quot;)
     .build()
 
-val opts =
-  Consumer.Options[IO, String]()
+val utf8Decoder: Array[Byte] =&gt; IO[String] =
+  bs =&gt; IO(new String(bs, UTF_8))
+
+val handler: Throwable =&gt; IO[Consumer.OnFailure] =
+  e =&gt; IO.println(s&quot;[error] - ${e.getMessage}&quot;).as(Consumer.OnFailure.Nack)
+
+val settings =
+  Consumer.Settings[IO, String]()
    .withInitialPosition(SubscriptionInitialPosition.Earliest)
    .withLogger(e =&gt; url =&gt; IO.println(s&quot;Message: $e, URL: $url&quot;))
    .withAutoUnsubscribe
    .withReadCompacted
    .withDeadLetterPolicy(deadLetterPolicy)
+   .withMessageDecoder(utf8Decoder)
+   .withDecodingErrorHandler(handler)
 
 def custom(
     pulsar: Pulsar.T,
     topic: Topic
 ): Resource[IO, Consumer[IO, String]] =
-  Consumer.make[IO, String](pulsar, topic, subs, opts)
+  Consumer.make[IO, String](pulsar, topic, subs, settings)
 </code></pre>
 </div>
 <div>
