@@ -216,19 +216,21 @@ trait Reader[F[_], E] {
 </code></pre>
 <p>There&rsquo;s also a <code>MessageReader</code> algebra, useful whenever you need more than the payload of the message, such as the <code>MessageId</code> and <code>MessageKey</code>.</p>
 <h2><a href="#creating-a-reader" name="creating-a-reader" class="anchor"><span class="anchor-link"></span></a>Creating a Reader</h2>
-<p>It provides a few constructors as both <code>Consumer</code> and <code>Producer</code> do for schema and message decoders, in addition to the following generic one.</p>
+<p>It provides a few constructors as both <code>Consumer</code> and <code>Producer</code> do for schema and message decoders. E.g.</p>
 <pre class="prettyprint"><code class="language-scala mdoc:compile-only">import dev.profunktor.pulsar._
 import dev.profunktor.pulsar.Reader.Settings
+import org.apache.pulsar.client.api.Schema
 
 import cats.effect._
 
 def make[F[_]: Sync, E](
     client: Pulsar.T,
     topic: Topic.Single,
+    schema: Schema[E],
     settings: Settings[F, E]
 ): Resource[F, Reader[F, E]] = ???
 </code></pre>
-<p>If you&rsquo;re interested in a <code>MessageReader</code> instead, you can use <code>messageReader</code> instead of <code>make</code>.</p>
+<p>If you&rsquo;re interested in a <code>MessageReader</code> instead, you can use <code>messageReader</code> instead of <code>make</code>. Check out all the available smart constructors either in the API or source code.</p>
 <p>Once we have a Pulsar client and a topic, we can proceed with the creation of a reader. If you missed that part, check out the <a href="Connection.html">connection</a> and <a href="Topic.html">topic</a> docs.</p>
 <pre class="prettyprint"><code class="language-scala mdoc">import dev.profunktor.pulsar._
 import dev.profunktor.pulsar.schema.PulsarSchema
@@ -265,13 +267,12 @@ val settings =
   Reader.Settings[IO, String]()
    .withStartMessageId(msgId)
    .withReadCompacted
-   .withSchema(schema)
 
 def custom(
     pulsar: Pulsar.T,
     topic: Topic.Single
 ): Resource[IO, Reader[IO, String]] =
-  Reader.make(pulsar, topic, settings)
+  Reader.make(pulsar, topic, schema, settings)
 </code></pre>
 <p>It is the responsibility of the application to know the specific <code>MessageId</code>, which internally represents a Ledger ID, Entry ID, and Partition ID.</p>
 </div>
