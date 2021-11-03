@@ -196,7 +196,7 @@ profunktor/neutron
 <p>The main constructor returns a <code>cats.effect.Resource</code>, and is defined as follows.</p>
 <pre class="prettyprint"><code class="language-scala mdoc">import cats.effect._
 import dev.profunktor.pulsar.Config.PulsarURL
-import dev.profunktor.pulsar.Pulsar.Options
+import dev.profunktor.pulsar.Pulsar.Settings
 
 import org.apache.pulsar.client.api.{ PulsarClient =&gt; Underlying }
 
@@ -204,7 +204,7 @@ type T = Underlying
 
 def make[F[_]: Sync](
     url: PulsarURL,
-    opts: Options = Options()
+    settings: Settings = Settings()
 ): Resource[F, T] = ???
 </code></pre>
 <p>A <code>PulsarURL</code> can only be built using smart builders, as shown in the next section.</p>
@@ -228,16 +228,16 @@ val config = Config.Builder.default
 
 Pulsar.make[IO](config.url)
 </code></pre>
-<h3><a href="#connection-options" name="connection-options" class="anchor"><span class="anchor-link"></span></a>Connection Options</h3>
+<h3><a href="#connection-settings" name="connection-settings" class="anchor"><span class="anchor-link"></span></a>Connection settings</h3>
 <p>Via the second constructor argument, we can set a few client options, such as timeouts.</p>
 <pre class="prettyprint"><code class="language-scala mdoc">import scala.concurrent.duration._
 
-val opts =
-  Options()
+val settings =
+  Settings()
     .withConnectionTimeout(45.seconds)
     .withOperationTimeout(30.minutes)
 
-Pulsar.make[IO](config.url, opts)
+Pulsar.make[IO](config.url, settings)
 </code></pre>
 </div>
 <div>
