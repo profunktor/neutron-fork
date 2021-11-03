@@ -269,7 +269,7 @@ def jsonDecoder[A: Decoder]: Array[Byte] =&gt; IO[A] =
 </code></pre>
 <p>Finally, there&rsquo;s a generic <code>make</code> which takes an <code>Settings[F, E]</code> where we can set many other consumer settings, including schema or decoding handler.</p>
 <p>BEWARE if you set the pulsar schema, then a decoding error handler won&rsquo;t take effect. Also, if you do not set neither the schema or the message decoder, then you&rsquo;ll get a runtime error when creating the consumer.</p>
-<pre class="prettyprint"><code class="language-scala">def make[F[_]: Sync: FutureLift, E: Schema](
+<pre class="prettyprint"><code class="language-scala">def make[F[_]: Sync: FutureLift, E](
     client: Pulsar.T,
     topic: Topic,
     sub: Subscription,

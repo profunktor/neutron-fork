@@ -225,7 +225,7 @@ trait Producer[F[_], E] {
 ): Resource[F, Producer[F, E]] = ???
 </code></pre>
 <p>Otherwise, we have the generic constructor that takes in a Producer.Settings argument.</p>
-<pre class="prettyprint"><code class="language-scala">def make[F[_]: Sync, E: Schema](
+<pre class="prettyprint"><code class="language-scala">def make[F[_]: Sync, E](
     client: Pulsar.T,
     topic: Topic.Single,
     settings: Settings[F, E] = null // default value does not work with generics
