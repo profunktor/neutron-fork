@@ -186,7 +186,7 @@ object Producer {
               send(msg, MessageKey.Empty, properties)
 
             override def send_(msg: E, properties: Map[String, String]): F[Unit] =
-              send_(msg, properties).void
+              send(msg, properties).void
 
           }
 
@@ -221,7 +221,7 @@ object Producer {
                 send(msg, MessageKey.Empty, properties)
 
               override def send_(msg: E, properties: Map[String, String]): F[Unit] =
-                send_(msg, properties).void
+                send(msg, properties).void
             }
           }
       }

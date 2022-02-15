@@ -102,14 +102,14 @@ object PulsarSuite extends IOSuite {
   test(
     "A message with properties is published and consumed successfully using Schema.BYTES"
   ) { client =>
-    val hpTopic = topic("message-with-properties")
+    val mpTopic = topic("message-with-properties")
 
     val utf8 = PulsarSchema.utf8
 
     val res: Resource[IO, (Consumer[IO, String], Producer[IO, String])] =
       for {
-        producer <- Producer.make[IO, String](client, hpTopic, utf8)
-        consumer <- Consumer.make[IO, String](client, hpTopic, sub("hps-props"), utf8)
+        producer <- Producer.make[IO, String](client, mpTopic, utf8)
+        consumer <- Consumer.make[IO, String](client, mpTopic, sub("hps-props"), utf8)
       } yield consumer -> producer
 
     Deferred[IO, (String, Map[String, String])].flatMap { latch =>
@@ -118,8 +118,9 @@ object PulsarSuite extends IOSuite {
         .flatMap {
           case (consumer, producer) =>
             val consume =
-              consumer.subscribe.evalMap { msg =>
-                consumer.ack(msg.id) *> latch.complete(msg.payload -> msg.properties)
+              consumer.subscribe.evalMap {
+                case Consumer.Message(id, _, props, payload) =>
+                  consumer.ack(id) *> latch.complete(payload -> props)
               }
 
             val testMsg   = "test"
